@@ -1,5 +1,6 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
+const { values } = require("lodash");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -137,7 +138,6 @@ const addRole = () => {
       });
     });
 };
-
 const addEmployee = () => {
   inquirer
     .prompt([
@@ -208,4 +208,41 @@ const viewEmployees = () => {
     runSearch();
   });
 };
-const updateEmployeeRole = () => {};
+const updateEmployeeRole = () => {
+  inquirer
+    .prompt([
+      {
+        name: "name",
+        type: "list",
+        message: "Who would you like to update?",
+        choices: [
+          { name: "Benjamin Franklin", value: 1 },
+          { name: "Dyon Squat", value: 2 },
+          { name: "Sabrina Malley", value: 3 },
+        ],
+      },
+      {
+        name: "role",
+        type: "list",
+        message: "What role are you changing to?",
+        choices: [
+          { name: "Sales Manager", value: 2 },
+          { name: "Engineer Boss", value: 3 },
+          { name: "Legal Crying Professional", value: 4 },
+        ],
+      },
+    ])
+
+    .then((answer) => {
+      const query = "UPDATE employee SET role_id = ? WHERE id = ?";
+      connection.query(
+        query,
+        [answer.role, answer.name],
+
+        (err, res) => {
+          if (err) throw err;
+          console.log(`Done!`);
+        }
+      );
+    });
+};

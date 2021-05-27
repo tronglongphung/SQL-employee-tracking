@@ -10,7 +10,7 @@ VALUES ('Sales'), ('Engineer'), ('Legal');
 SELECT * FROM role;
 
 INSERT INTO role (title, salary, department_id)
-VALUES ('Sales'), ('Engineer'), ('Legal');
+VALUES ('Sales Manager', 20000, 1), ('Engineer Boss', 10000, 2), ('Legal Crying Professional', 900000, 3);
 
 
 
