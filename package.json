@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "start": "node employeeTracker.js"
+  },
+  "dependencies": {
+    "inquirer": "^8.1.0",
+    "mysql2": "^2.2.5"
+  }
+}
