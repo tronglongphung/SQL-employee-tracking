@@ -1,6 +1,5 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
-const { values } = require("lodash");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -94,12 +93,11 @@ const addDepartment = () => {
       connection.query("SELECT * FROM department", (err, res) => {
         if (err) throw err;
         // Log all results of the SELECT statement
-        console.table(res);
+        // console.table(res);
         runSearch();
       });
     });
 };
-
 const addRole = () => {
   inquirer
     .prompt([
@@ -113,6 +111,16 @@ const addRole = () => {
         type: "input",
         message: "What is the role salary?",
       },
+      {
+        name: "departmentID",
+        type: "list",
+        message: "Which department is this person?",
+        choices: [
+          { name: "Sales", value: 1 },
+          { name: "Engineer", value: 2 },
+          { name: "Legal", value: 3 },
+        ],
+      },
     ])
     .then((answer) => {
       const query = "INSERT INTO role SET ?";
@@ -121,8 +129,7 @@ const addRole = () => {
         {
           title: `${answer.roleTitle}`,
           salary: `${answer.roleSalary}`,
-          department_id: `${answer.roleSalary}`,
-          //   how to do joining?
+          department_id: `${answer.departmentID}`,
         },
         (err, res) => {
           if (err) throw err;
@@ -133,7 +140,7 @@ const addRole = () => {
       );
       connection.query("SELECT * FROM role", (err, res) => {
         if (err) throw err;
-        console.table(res);
+        // console.table(res);
         runSearch();
       });
     });
@@ -153,13 +160,13 @@ const addEmployee = () => {
       },
       {
         name: "roleId",
-        type: "input",
-        message: "What is the role ID?",
-      },
-      {
-        name: "managerId",
-        type: "input",
-        message: "What is the managers ID?",
+        type: "list",
+        message: "What is the role?",
+        choices: [
+          { name: "Sales", value: 1 },
+          { name: "Engineer", value: 2 },
+          { name: "Legal", value: 3 },
+        ],
       },
     ])
     .then((answer) => {
@@ -167,22 +174,21 @@ const addEmployee = () => {
       connection.query(
         query,
         {
-          first_name: `${answer.roleTitle}`,
-          last_name: `${answer.roleSalary}`,
-          role_id: `${answer.roleSalary}`,
-          manager_id: `${answer.roleSalary}`,
+          first_name: `${answer.firstName}`,
+          last_name: `${answer.lastName}`,
+          role_id: `${answer.roleId}`,
           //   how to do joining?
         },
         (err, res) => {
           if (err) throw err;
           console.log(
-            `Added ${answer.roleTitle}, ${answer.roleSalary} into Role`
+            `Added new employee ${answer.firstName} ${answer.lastName}`
           );
         }
       );
-      connection.query("SELECT * FROM role", (err, res) => {
+      connection.query("SELECT * FROM employee", (err, res) => {
         if (err) throw err;
-        console.table(res);
+        // console.table(res);
         runSearch();
       });
     });
